@@ -45,7 +45,7 @@ public class Board {
         return this.noOfEmptyFields;
     }
     
-    public byte getFieldMark(Coordinate c) {
+    public int getFieldMark(Coordinate c) {
         return this.matrix[c.row][c.col];
     }
     
@@ -236,16 +236,9 @@ public class Board {
         sb.append(System.lineSeparator());
         
         for (int row = 0; row < size; row++) {
-
-            //add empty spaces to make romboid shape
-//            for (int iCount = 0; iCount < row; iCount++) {
-//                sb.append(" ");
-//            }
-
             for (int col = 0; col < size; col++) {
                 sb.append(matrix[row][col]).append(" ");
             }
-
             sb.append(System.lineSeparator());
         }
 

@@ -137,10 +137,13 @@ public class MonteCarloThread extends Thread {
                     }
                 }
                 
-                //check if this player won, and the other player didn't win
-                if (MonteCarlo.didPlayerWin(boardCopy, player) &&
-                        !MonteCarlo.didPlayerWin(
-                                boardCopy, Board.calculateNextPlayer(player))) {
+                //check if current player won and the other player didn't win
+                boolean a = MonteCarlo.didPlayerWin(boardCopy, player);
+                boolean b = MonteCarlo.didPlayerWin(boardCopy, Board.calculateNextPlayer(player));
+                
+                if (MonteCarlo.didPlayerWin(boardCopy, player) && 
+                        !MonteCarlo.didPlayerWin(boardCopy, 
+                                Board.calculateNextPlayer(player))) {
                     thisFieldWinSum++;
                 }
             }
