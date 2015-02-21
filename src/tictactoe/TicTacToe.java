@@ -20,13 +20,17 @@ public class TicTacToe {
         //MCSimulationMove[] evaluateBoard = MonteCarlo.evaluateBoard(b, 5000, 1);
         System.out.println("");
         
-        PlayerHuman ph1 = new PlayerHuman();
-        PlayerHuman ph2 = new PlayerHuman();
-        PlayerMonteCarlo pmc1 = new PlayerMonteCarlo(50000, 1, true);
-        PlayerMonteCarlo pmc2 = new PlayerMonteCarlo(50000, 1, true);
+//        PlayerHuman ph1 = new PlayerHuman();
+//        PlayerHuman ph2 = new PlayerHuman();
+//        PlayerMonteCarlo pmc1 = new PlayerMonteCarlo(50000, 1, true);
+//        PlayerMonteCarlo pmc2 = new PlayerMonteCarlo(50000, 1, true);
+//        
+//        Game g = new Game(b, pmc1, pmc2);
+//        g.play();
         
-        Game g = new Game(b, pmc1, pmc2);
-        g.play();
+        for (int iCount = 0; iCount < 100; iCount++) {
+            System.out.println(RandomBoardGenerator.makeUpARandomBoard(3));
+        }
     }
     
 }

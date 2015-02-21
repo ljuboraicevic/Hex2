@@ -37,6 +37,19 @@ public class Board {
         this.nextMovePlayer = 1;
     }
     
+    public Board(int size, byte[] sequence, int movesPlayed) {
+        this(size);
+        
+        //overlay the sequence over the board
+        for (int iCount = 0; iCount < sequence.length; iCount++) {
+            Coordinate c = this.intToCoordinate(iCount);
+            this.matrix[c.row][c.col] = sequence[iCount];
+        }
+        
+        this.noOfEmptyFields = size * size - movesPlayed;
+        this.nextMovePlayer = (byte) (movesPlayed % 2 + 1);
+    }
+    
     public int getSize() {
         return this.size;
     }
@@ -186,7 +199,7 @@ public class Board {
      * @return Coordinate of i
      * @throws IndexOutOfBoundsException 
      */
-    public Coordinate intToCoordinate(int i) throws IndexOutOfBoundsException {
+    public final Coordinate intToCoordinate(int i) throws IndexOutOfBoundsException {
         if (size*size <= i) { 
             throw new IndexOutOfBoundsException(
                     "i is greater than the size of the board."); 
