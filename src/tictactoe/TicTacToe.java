@@ -17,8 +17,16 @@ public class TicTacToe {
 //        b.putMark(new Coordinate(2, 2), (byte)1);
 //        b.putMark(new Coordinate(1, 2), (byte)2);
         
-        MCSimulationMove[] evaluateBoard = MonteCarlo.evaluateBoard(b, 5000, 1);
+        //MCSimulationMove[] evaluateBoard = MonteCarlo.evaluateBoard(b, 5000, 1);
         System.out.println("");
+        
+        PlayerHuman ph1 = new PlayerHuman();
+        PlayerHuman ph2 = new PlayerHuman();
+        PlayerMonteCarlo pmc1 = new PlayerMonteCarlo(50000, 1, true);
+        PlayerMonteCarlo pmc2 = new PlayerMonteCarlo(50000, 1, true);
+        
+        Game g = new Game(b, pmc1, pmc2);
+        g.play();
     }
     
 }

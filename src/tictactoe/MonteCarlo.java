@@ -2,7 +2,6 @@ package tictactoe;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -96,6 +95,72 @@ public class MonteCarlo {
     }
     
     /**
+     * Returns array of MCSimulationMove that contains all possible moves and 
+     * their probabilities. First element in array is best move, chosen by MonteCarlo
+     * @param b
+     * @param repetitions
+     * @return 
+     */
+    public static MCSimulationMove[] evaluateBoardNoParallel(
+            Board b, 
+            int repetitions) {
+        
+        Board boardCopy = b.deepCopy();
+        int noOfEmptyFields = b.getNoOfEmptyFields();
+        int movesPlayed = b.getSize() * b.getSize() - noOfEmptyFields;
+        byte player = b.whosOnTheMove();
+        Coordinate[] emptyFields = b.getEmptyFields();
+        MCSimulationMove[] moves = new MCSimulationMove[noOfEmptyFields];
+        
+
+        //for each of the empty fields on the board
+        for (int field = 0; field < noOfEmptyFields; field++) {
+
+            int thisFieldWinSum = 0;
+            
+            
+            //mark current "empty" field as this player's and then run the
+            //simulation on the rest of the empty fields
+            boardCopy.putMarkHard(
+                    new Coordinate(emptyFields[field].row, emptyFields[field].col), 
+                    player
+            );
+            
+            //make repetitions
+            for (int repetition = 0; repetition < repetitions; repetition++) {
+                
+                //get random sequence
+                byte[] sequence = MonteCarlo.getRandomSequence(
+                        movesPlayed, 
+                        boardCopy.getSize() * boardCopy.getSize());
+                
+                //overlay the random sequence on top of the boardCopy
+                int seqCount = 0;
+                for (int iCount = 0; iCount < emptyFields.length; iCount++) {
+                    if (iCount != field) {
+                        Coordinate c = emptyFields[iCount];
+                        boardCopy.putMarkHard(
+                                new Coordinate(c.row, c.col), sequence[seqCount]);
+                    }
+                    seqCount++;
+                }
+
+                //check if current player won and the other player didn't win
+                //if (MonteCarlo.didPlayerWin(boardCopy, player) && 
+                        if (!MonteCarlo.didPlayerWin(boardCopy, 
+                                Board.calculateNextPlayer(player))) {
+                    thisFieldWinSum++;
+                }
+            }
+            
+            moves[field] = new MCSimulationMove(emptyFields[field], thisFieldWinSum * 1.0);
+        }
+        
+        Arrays.sort(moves, Comparator.reverseOrder());
+        return moves;
+    }
+    
+    /**
      * Makes a random sequence of moves.
      * 
      * @param movesPlayed
@@ -116,7 +181,7 @@ public class MonteCarlo {
      * @return 
      */
     private static byte[] getSequence(int movesPlayed, int boardSize) {
-        byte[] result = new byte[boardSize - movesPlayed - 1];
+        byte[] result = new byte[boardSize - movesPlayed];
         int ones = getNumberOfFirstPlayersMoves(movesPlayed, boardSize);
         
         //fill in the ones and twos
@@ -151,13 +216,14 @@ public class MonteCarlo {
      * 
      * @param ar Array of bytes
      */
-    private static void shuffleArray(byte[] ar) {
-        Random random = new Random();
-        for (int i = ar.length - 1; i > 0; i--) {
-            int index = random.nextInt(i + 1);
-            byte a = ar[index];
-            ar[index] = ar[i];
-            ar[i] = a;
+    public static void shuffleArray(byte[] ar) {
+        int N = ar.length;
+        for (int i = 0; i < N; i++) {
+            // choose index uniformly in [i, N-1]
+            int r = i + (int) (Math.random() * (N - i));
+            byte swap = ar[r];
+            ar[r] = ar[i];
+            ar[i] = swap;
         }
     }
     
@@ -169,39 +235,42 @@ public class MonteCarlo {
      * @return True if player won, false otherwise.
      */
     public static boolean didPlayerWin(Board b, byte player) {
-        int wonSum = player * b.getSize();
-
         //check rows
         for (int row = 0; row < b.getSize(); row++) {
-            int rowSum = 0;
-            for (int col = 0; col < b.getSize(); col++) {
-                rowSum += b.getFieldMark(new Coordinate(row, col));
+            //byte mark;
+            int col = 0;
+            while (col < b.getSize()
+                    && b.getFieldMark(new Coordinate(row, col)) == player) {
+                col++;
             }
             
-            if (rowSum == wonSum) { return true; }
+            if (col == b.getSize()) { return true; }
         }
 
         //check columns
         for (int col = 0; col < b.getSize(); col++) {
-            int colSum = 0;
-            for (int row = 0; row < b.getSize(); row++) {
-                colSum += b.getFieldMark(new Coordinate(row, col));
+            int row = 0;
+            while (row < b.getSize()
+                    && b.getFieldMark(new Coordinate(row, col)) == player) {
+                row++;
             }
-            
-            if (colSum == wonSum) { return true; }
+            if (row == b.getSize()) { return true; }
         }
         
+        //check diagonals
         int diag1Sum = 0;
         int diag2Sum = 0;
         
-        //check diagonals
-        for (int row = 0; row < b.getSize(); row++) {
-            diag1Sum += b.getFieldMark(new Coordinate(row, row));
-            diag2Sum += b.getFieldMark(new Coordinate(row, (b.getSize() - row - 1)));
+        for (int diag1 = 0; diag1 < b.getSize(); diag1++) {
+            diag1Sum += b.getFieldMark(new Coordinate(diag1, diag1)) == player ? 
+                    1 : 0;
         }
         
-        if (diag1Sum == wonSum || diag2Sum == wonSum) { return true; }
+        for (int diag2 = 0; diag2 < b.getSize(); diag2++) {
+            diag2Sum += b.getFieldMark(new Coordinate(diag2, b.getSize() - diag2 - 1)) 
+                    == player ? 1 : 0;
+        }
         
-        return false;
+        return diag1Sum == b.getSize() || diag2Sum == b.getSize();
     }
 }

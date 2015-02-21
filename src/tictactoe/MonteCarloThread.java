@@ -1,9 +1,9 @@
 package tictactoe;
 
 /**
- * Class MonteCarloSimulation represents a part of the whole simulation. Each 
- * Monte Carlo simulation works on a subset of all of the empty fields on the 
- * board.
+ * Class MonteCarloSimulation represents a part of the whole simulation. 
+ * Each Monte Carlo simulation works on a subset of all of the empty fields on 
+ * the board.
  * 
  * @author Ljubo Raicevic <rljubo90@gmail.com>
  */
@@ -25,9 +25,9 @@ public class MonteCarloThread extends Thread {
     private final Coordinate[] emptyFields;
     
     /**
-     * This simulation should only take some empty fields into account. Variable
-     * 'from' represents the start of range of empty fields that this simulation
-     * will work with.
+     * This simulation should only take some empty fields into account. 
+     * Variable 'from' represents the start of range of empty fields that this 
+     * simulation will work with.
      */
     private final int from;
     
@@ -136,11 +136,8 @@ public class MonteCarloThread extends Thread {
                         seqCount++;
                     }
                 }
-                
+
                 //check if current player won and the other player didn't win
-                boolean a = MonteCarlo.didPlayerWin(boardCopy, player);
-                boolean b = MonteCarlo.didPlayerWin(boardCopy, Board.calculateNextPlayer(player));
-                
                 if (MonteCarlo.didPlayerWin(boardCopy, player) && 
                         !MonteCarlo.didPlayerWin(boardCopy, 
                                 Board.calculateNextPlayer(player))) {
