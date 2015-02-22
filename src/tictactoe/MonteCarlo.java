@@ -99,11 +99,13 @@ public class MonteCarlo {
      * their probabilities. First element in array is best move, chosen by MonteCarlo
      * @param b
      * @param repetitions
+     * @param sb
      * @return 
      */
     public static MCSimulationMove[] evaluateBoardNoParallel(
             Board b, 
-            int repetitions) {
+            int repetitions,
+            StringBuilder sb) {
         
         Board boardCopy = b.deepCopy();
         int noOfEmptyFields = b.getNoOfEmptyFields();
@@ -155,6 +157,26 @@ public class MonteCarlo {
             
             moves[field] = new MCSimulationMove(emptyFields[field], thisFieldWinSum * 1.0);
         }
+
+        //add data to StringBuilder
+        if (sb != null) {
+            Board boardRecord = b.deepCopy();
+            for (int iCount = 0; iCount < noOfEmptyFields; iCount++) {
+                //add players mark
+                boardRecord.putMarkHard(emptyFields[iCount], player);
+
+                //add a new line
+                sb.append(boardRecord.toSingleRowString(false));
+                sb.append(" ");
+                sb.append(moves[iCount].getProbability());
+                sb.append(System.lineSeparator());
+
+
+                //remove players mark
+                boardRecord.putMarkHard(emptyFields[iCount], (byte)0);
+            }
+        }
+        
         
         Arrays.sort(moves, Comparator.reverseOrder());
         return moves;

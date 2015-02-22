@@ -14,7 +14,11 @@ public class RandomBoardGenerator {
      */
     public static Board makeUpARandomBoard(int boardSize) {
         int n = boardSize * boardSize;
-        int movesPlayed = (int) Math.ceil(Math.random() * n);
+        //for now, movesPlayed has to be even
+        int movesPlayed = 1;
+        while (movesPlayed % 2 != 0) {
+            movesPlayed = (int) Math.ceil(Math.random() * n);
+        }
         return makeRandomBoard(movesPlayed, boardSize);
     }
     

@@ -43,7 +43,7 @@ public class PlayerMonteCarlo implements Player {
     public Coordinate makeMove(Board t) {
         //return makeMoveWithProbability(t)[0].getCoordinates();
         //MCSimulationMove[] c = MonteCarlo.evaluateBoardNoParallel(t, repetitions);
-        return MonteCarlo.evaluateBoardNoParallel(t, repetitions)[0].getCoordinates();
+        return MonteCarlo.evaluateBoardNoParallel(t, repetitions, null)[0].getCoordinates();
     }
     
     /**
