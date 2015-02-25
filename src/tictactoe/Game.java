@@ -57,7 +57,7 @@ public class Game {
     /**
      * Starts the game. Players take turns until one of them wins.
      */
-    public void play() {
+    public int play() {
         int winningPlayer = 0;
 
         //while game isn't over
@@ -75,6 +75,7 @@ public class Game {
 
         System.out.println(board);
         System.out.println("Player " + winningPlayer + " wins!");
+        return winningPlayer;
     }
 
     /**

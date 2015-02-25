@@ -3,6 +3,7 @@ package tictactoe;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  *
@@ -10,39 +11,56 @@ import java.io.IOException;
  */
 public class TicTacToe {
 
+    /* CONSTANTS */
+    private static final int boardSize = 3;
+    private static final int MCRepetitions = 50000;
+    private static final String NNFileName = "fannnetworks/fifth.net";
+    
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        /* INITIALIZE THE PLAYERS */
+        PlayerHuman ph1 = new PlayerHuman();
+        PlayerMonteCarlo pmc1 = new PlayerMonteCarlo(MCRepetitions);
+        PlayerMonteCarlo pmc2 = new PlayerMonteCarlo(MCRepetitions);
+        PlayerNeuralNetwork pnn1 = new PlayerNeuralNetwork(NNFileName);
         
-        Board b = new Board(3);
-//        b.putMark(new Coordinate(0, 0), (byte)1);
-//        b.putMark(new Coordinate(1, 1), (byte)2);
-//        b.putMark(new Coordinate(2, 2), (byte)1);
-//        b.putMark(new Coordinate(1, 2), (byte)2);
+        multipleGames(pnn1, pmc2, 10);
+    }
         
-        //MCSimulationMove[] evaluateBoard = MonteCarlo.evaluateBoard(b, 5000, 1);
-        System.out.println("");
+    public static void singleGame(Player p1, Player p2) {
+        Board b = new Board(boardSize);
+        Game g = new Game(b, p1, p2);
+        g.play();
+    }
+    
+    public static void multipleGames(Player p1, Player p2, int repetitions) {
+        int[] wins = new int[boardSize];
         
-//        PlayerHuman ph1 = new PlayerHuman();
-//        PlayerHuman ph2 = new PlayerHuman();
-//        PlayerMonteCarlo pmc1 = new PlayerMonteCarlo(50000, 1, true);
-//        PlayerMonteCarlo pmc2 = new PlayerMonteCarlo(50000, 1, true);
-//        
-//        Game g = new Game(b, pmc1, pmc2);
-//        g.play();
+        for (int iCount = 0; iCount < repetitions; iCount++) {
+            Board b = new Board(boardSize);
+            Game g = new Game(b, p1, p2);
+            int winner = g.play();
+            wins[winner]++;
+        }
+        
+        System.out.println(Arrays.toString(wins));
+    }
+    
+    public static void dataGeneration(int repetitions, String fileName) 
+            throws IOException {
         
         StringBuilder sb = new StringBuilder();
         
-        for (int iCount = 0; iCount < 100; iCount++) {
-            //System.out.println(RandomBoardGenerator.makeUpARandomBoard(3));
-            Board board = RandomBoardGenerator.makeUpARandomBoard(3);
-            MonteCarlo.evaluateBoardNoParallel(board, 1000, sb);
+        for (int iCount = 0; iCount < repetitions; iCount++) {
+            Board board = RandomBoardGenerator.makeUpARandomBoard(boardSize);
+            MonteCarlo.evaluateBoardNoParallel(board, repetitions, sb);
+            if (iCount % repetitions == 0) { System.out.println(iCount); }
         }
         
-        try (FileWriter fw = new FileWriter(new File("abcd"))) {
+        try (FileWriter fw = new FileWriter(new File(fileName))) {
             fw.write(sb.toString());
         }
     }
-    
 }

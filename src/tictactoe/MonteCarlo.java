@@ -148,8 +148,8 @@ public class MonteCarlo {
                 }
 
                 //check if current player won and the other player didn't win
-                //if (MonteCarlo.didPlayerWin(boardCopy, player) && 
-                        if (!MonteCarlo.didPlayerWin(boardCopy, 
+                if (MonteCarlo.didPlayerWin(boardCopy, player) && 
+                        !MonteCarlo.didPlayerWin(boardCopy, 
                                 Board.calculateNextPlayer(player))) {
                     thisFieldWinSum++;
                 }
@@ -167,10 +167,8 @@ public class MonteCarlo {
 
                 //add a new line
                 sb.append(boardRecord.toSingleRowString(false));
-                sb.append(" ");
-                sb.append(moves[iCount].getProbability());
+                sb.append(moves[iCount].getProbability() / repetitions);
                 sb.append(System.lineSeparator());
-
 
                 //remove players mark
                 boardRecord.putMarkHard(emptyFields[iCount], (byte)0);
@@ -222,7 +220,9 @@ public class MonteCarlo {
      * @param boardSize Size of the board
      * @return Number of first players moves
      */
-    private static int getNumberOfFirstPlayersMoves(int movesPlayed, int boardSize) {
+    private static int getNumberOfFirstPlayersMoves(int movesPlayed, 
+            int boardSize) {
+        
         int length = boardSize - movesPlayed - 1;
         int result = (int) Math.floor(length / 2);
         

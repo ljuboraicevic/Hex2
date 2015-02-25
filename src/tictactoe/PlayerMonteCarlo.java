@@ -17,22 +17,23 @@ public class PlayerMonteCarlo implements Player {
     private final int threads;
     
     /**
-     * if there are two or more results with best result, should return first one
-     * or randomly chosen
-     */
-    private final boolean randomizeBest;
-    /**
      * Initializes a new PlayerMonteCarlo.
      * 
      * @param repetitions Monte Carlo simulation repetitions
      * @param threads How many threads to use during the simulation
-     * @param randomizeBest if there are two or more results with best result, 
-     * should return first one or randomly chose among them
      */
-    public PlayerMonteCarlo(int repetitions, int threads, boolean randomizeBest) {
+    public PlayerMonteCarlo(int repetitions, int threads) {
         this.repetitions = repetitions;
         this.threads = threads;
-        this.randomizeBest = randomizeBest;
+    }
+    
+    /**
+     * Initializes a new PlayerMonteCarlo.
+     * 
+     * @param repetitions Monte Carlo simulation repetitions
+     */
+    public PlayerMonteCarlo(int repetitions) {
+        this(repetitions, 1);
     }
     
     public int getNumberOfRepetitions(){
