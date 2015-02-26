@@ -2,107 +2,26 @@ package tictactoe;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- *
+ * MonteCarlo class contains static methods that are used by PlayerMonteCarlo
+ * and dataGeneration in TitTacToe.java.
+ * 
  * @author Ljubo Raicevic <rljubo90@gmail.com>
  */
 public class MonteCarlo {
-
-    /**
-     * Should not be instantiated.
-     */
-    public MonteCarlo() {}
-    
+        
     /**
      * Returns array of MCSimulationMove that contains all possible moves and 
-     * their probabilities. First element in array is best move, chosen by MonteCarlo
-     * @param b
-     * @param repetitions
-     * @param threads
-     * @return 
-     */
-    public static MCSimulationMove[] evaluateBoard(
-            Board b, 
-            int repetitions, 
-            int threads) {
-        //make a deep copy of the board for each thread
-        Board[] boardCopies = new Board[threads];
-        for (int iCount = 0; iCount < threads; iCount++) {
-            boardCopies[iCount] = b.deepCopy();
-        }
-        
-        int noOfEmptyFields = b.getNoOfEmptyFields();
-        int movesPlayed = b.getSize() * b.getSize() - noOfEmptyFields;
-        byte player = b.whosOnTheMove();
-        
-        //create simulation threads
-        MonteCarloThread[] simArray = new MonteCarloThread[threads];
-        int fields = noOfEmptyFields / threads;
-        int iCount;
-        for (iCount = 0; iCount < threads - 1; iCount++) {
-            simArray[iCount] = new MonteCarloThread(
-                    boardCopies[iCount], 
-                    b,
-                    iCount * fields, 
-                    (iCount + 1) * fields , 
-                    repetitions, 
-                    movesPlayed, 
-                    player);
-        }
-        
-        //last simulation
-        simArray[threads - 1] = new MonteCarloThread(
-                boardCopies[threads - 1], 
-                b,
-                iCount * fields, 
-                noOfEmptyFields, 
-                repetitions, 
-                movesPlayed, 
-                player);
-        
-        //start all threads
-        for (MonteCarloThread mct : simArray) {
-            mct.start();
-        }
-        
-        //join, so that everything bellow has to wait until they're done
-        for (MonteCarloThread mct : simArray) {
-            try {
-                mct.join();
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MonteCarlo.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-        //creating array of all moves
-        MCSimulationMove[] allMoves = new MCSimulationMove[noOfEmptyFields];
-        
-        int counter = 0;
-        //copying moves from thread - simulation to one array
-        for (int jCount = 0; jCount < threads; jCount++) {
-            MCSimulationMove[] help = simArray[jCount].getAllMoves();
-            for (iCount = 0; iCount < help.length; iCount++) {
-                allMoves[counter++] = help[iCount];
-            }
-        }
-        
-        Arrays.sort(allMoves, Comparator.reverseOrder());
-        
-        return allMoves;
-    }
-    
-    /**
-     * Returns array of MCSimulationMove that contains all possible moves and 
-     * their probabilities. First element in array is best move, chosen by MonteCarlo
+     * their probabilities. First element in array is best move, chosen by 
+     * MonteCarlo.
+     * 
      * @param b
      * @param repetitions
      * @param sb
      * @return 
      */
-    public static MCSimulationMove[] evaluateBoardNoParallel(
+    public static MCSimulationMove[] evaluateBoard(
             Board b, 
             int repetitions,
             StringBuilder sb) {
@@ -113,13 +32,11 @@ public class MonteCarlo {
         byte player = b.whosOnTheMove();
         Coordinate[] emptyFields = b.getEmptyFields();
         MCSimulationMove[] moves = new MCSimulationMove[noOfEmptyFields];
-        
 
         //for each of the empty fields on the board
         for (int field = 0; field < noOfEmptyFields; field++) {
 
             int thisFieldWinSum = 0;
-            
             
             //mark current "empty" field as this player's and then run the
             //simulation on the rest of the empty fields
@@ -148,8 +65,8 @@ public class MonteCarlo {
                 }
 
                 //check if current player won and the other player didn't win
-                if (MonteCarlo.didPlayerWin(boardCopy, player) && 
-                        !MonteCarlo.didPlayerWin(boardCopy, 
+                //if (MonteCarlo.didPlayerWin(boardCopy, player) && 
+                        if (!MonteCarlo.didPlayerWin(boardCopy, 
                                 Board.calculateNextPlayer(player))) {
                     thisFieldWinSum++;
                 }
@@ -175,7 +92,6 @@ public class MonteCarlo {
             }
         }
         
-        
         Arrays.sort(moves, Comparator.reverseOrder());
         return moves;
     }
@@ -187,7 +103,7 @@ public class MonteCarlo {
      * @param boardSize
      * @return 
      */
-    public static byte[] getRandomSequence(int movesPlayed, int boardSize) {
+    private static byte[] getRandomSequence(int movesPlayed, int boardSize) {
         byte[] result = getSequence(movesPlayed, boardSize);
         shuffleArray(result);
         return result;
@@ -259,7 +175,6 @@ public class MonteCarlo {
     public static boolean didPlayerWin(Board b, byte player) {
         //check rows
         for (int row = 0; row < b.getSize(); row++) {
-            //byte mark;
             int col = 0;
             while (col < b.getSize()
                     && b.getFieldMark(new Coordinate(row, col)) == player) {

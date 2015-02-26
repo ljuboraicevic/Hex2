@@ -1,7 +1,7 @@
 package tictactoe;
 
 /**
- * The <tt>Game</tt> class represents a single game of Hex.
+ * The Game class represents a single game of Tic-Tac-Toe.
  *
  * @author Ljubo Raicevic <rljubo90@gmail.com>
  */
@@ -21,7 +21,6 @@ public class Game {
      * How many moves have been played so far in the game.
      */
     protected int movesPlayed;
-    
 
     /**
      * Initializes a new game.
@@ -56,6 +55,8 @@ public class Game {
 
     /**
      * Starts the game. Players take turns until one of them wins.
+     * 
+     * @return Returns the winning player
      */
     public int play() {
         int winningPlayer = 0;
@@ -76,35 +77,6 @@ public class Game {
         System.out.println(board);
         System.out.println("Player " + winningPlayer + " wins!");
         return winningPlayer;
-    }
-
-    /**
-     * Checks if the field is on one of the edges of the board.
-     *
-     * @param c Coordinates of the field
-     * @return true if field is on the edge, false otherwise
-     */
-    protected boolean isFieldOnPlayersEdge(Coordinate c) {
-        int size = board.getSize() - 1;
-        int player = movesPlayed % 2;
-
-        //for the first player check vertical edges
-        if (player == 0) {
-            return c.row == 0 || c.row == size;
-        } //for the second player check horizontal edges
-        else {
-            return c.col == 0 || c.col == size;
-        }
-    }
-
-    /**
-     * Calculates index of the field in the union find.
-     *
-     * @param c Coordinates of the field
-     * @return Index of the field in the union find
-     */
-    protected int getFieldIndex(Coordinate c) {
-        return c.row * board.getSize() + c.col;
     }
 
 }

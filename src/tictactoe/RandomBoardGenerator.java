@@ -14,25 +14,44 @@ public class RandomBoardGenerator {
      */
     public static Board makeUpARandomBoard(int boardSize) {
         int n = boardSize * boardSize;
-        //for now, movesPlayed has to be even
-        int movesPlayed = 1;
-        while (movesPlayed % 2 != 0) {
-            movesPlayed = (int) Math.ceil(Math.random() * n);
-        }
-        return makeRandomBoard(movesPlayed, boardSize);
+        return makeRandomBoard(getRandomMovesPlayed(), boardSize);
     }
     
     /**
-     * Makes a random board, when given movesPlayed and boardSize.
+     * Makes a random board, when given movesPlayed and boardSize. Only returns
+     * random boards that don't already have a winning combination on them.
      * 
      * @param movesPlayed
      * @param boardSize
      * @return 
      */
     public static Board makeRandomBoard(int movesPlayed, int boardSize) {
-        byte[] sequence = getRandomSequence(movesPlayed, boardSize * boardSize);
-        Board b = new Board(boardSize, sequence, movesPlayed);
+        Board b = null;
+        boolean boardNotWon = false;
+        while (!boardNotWon) {
+            byte[] sequence = getRandomSequence(movesPlayed, boardSize * boardSize);
+            b = new Board(boardSize, sequence, movesPlayed);
+            if (!MonteCarlo.didPlayerWin(b, (byte)1)
+                    && !MonteCarlo.didPlayerWin(b, (byte)2)) {
+                boardNotWon = true;
+            }
+        }
         return b;
+    }
+
+    /**
+     * Random number of moves played can't be uniformly distributed, since there
+     * are more combinations for moves later in the game.
+     * 
+     * @return 
+     */
+    private static int getRandomMovesPlayed() {
+        int random = (int) Math.ceil(Math.random() * 559953);
+        if      (random <= 9)      { return 0; }
+        else if (random <= 504)    { return 2; }
+        else if (random <= 15120)  { return 4; }
+        else if (random <= 181440) { return 6; }
+        return 8;
     }
     
     /**

@@ -1,31 +1,17 @@
 package tictactoe;
 
 /**
- *
+ * A Monte Carlo player. Uses Monte Carlo simulation from MonteCarlo.java to
+ * make moves.
+ * 
  * @author Ljubo Raicevic <rljubo90@gmail.com>
  */
 public class PlayerMonteCarlo implements Player {
 
     /**
-     * Determines how many times Monte Carlo simulation is run.
+     * How many times Monte Carlo simulation is run.
      */
     private final int repetitions;
-    
-    /**
-     * How many threads should be used when doing the simulation.
-     */
-    private final int threads;
-    
-    /**
-     * Initializes a new PlayerMonteCarlo.
-     * 
-     * @param repetitions Monte Carlo simulation repetitions
-     * @param threads How many threads to use during the simulation
-     */
-    public PlayerMonteCarlo(int repetitions, int threads) {
-        this.repetitions = repetitions;
-        this.threads = threads;
-    }
     
     /**
      * Initializes a new PlayerMonteCarlo.
@@ -33,7 +19,7 @@ public class PlayerMonteCarlo implements Player {
      * @param repetitions Monte Carlo simulation repetitions
      */
     public PlayerMonteCarlo(int repetitions) {
-        this(repetitions, 1);
+        this.repetitions = repetitions;
     }
     
     public int getNumberOfRepetitions(){
@@ -41,60 +27,7 @@ public class PlayerMonteCarlo implements Player {
     }
     
     @Override
-    public Coordinate makeMove(Board t) {
-        //return makeMoveWithProbability(t)[0].getCoordinates();
-        //MCSimulationMove[] c = MonteCarlo.evaluateBoardNoParallel(t, repetitions);
-        return MonteCarlo.evaluateBoardNoParallel(t, repetitions, null)[0].getCoordinates();
-    }
-    
-    /**
-     * Makes a random sequence of moves.
-     * 
-     * @param movesPlayed
-     * @param boardSize
-     * @return 
-     */
-    public static byte[] getRandomSequence(int movesPlayed, int boardSize) {
-        byte[] result = getSequence(movesPlayed, boardSize);
-        MonteCarlo.shuffleArray(result);
-        return result;
-    }
-
-    /**
-     * Makes a non-random sequence of moves.
-     * 
-     * @param movesPlayed
-     * @param boardSize
-     * @return 
-     */
-    private static byte[] getSequence(int movesPlayed, int boardSize) {
-        byte[] result = new byte[boardSize - movesPlayed - 1];
-        int ones = getNumberOfFirstPlayersMoves(movesPlayed, boardSize);
-        
-        //fill in the ones and twos
-        for (int iCount = 0; iCount < result.length; iCount++) {
-            result[iCount] = iCount < ones ? (byte) 1 : (byte) 2;
-        }
-        
-        return result;
-    }
-    
-    /**
-     * Returns how many ones or first player's moves should be in the random
-     * sequence.
-     * 
-     * @param movesPlayed Moved played so far in the game
-     * @param boardSize Size of the board
-     * @return Number of first players moves
-     */
-    private static int getNumberOfFirstPlayersMoves(int movesPlayed, int boardSize) {
-        int length = boardSize - movesPlayed - 1;
-        int result = (int) Math.floor(length / 2);
-        
-        if (movesPlayed % 2 == 1) {
-            if (length % 2 == 1) { result += 1; }
-        }
-       
-        return result;
+    public Coordinate makeMove(Board b) {
+        return MonteCarlo.evaluateBoard(b, repetitions, null)[0].getCoordinates();
     }
 }

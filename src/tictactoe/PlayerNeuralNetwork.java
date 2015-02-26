@@ -3,6 +3,10 @@ package tictactoe;
 import com.googlecode.fannj.Fann;
 
 /**
+ * A neural network player. Uses jfann library (which in turn uses fann library
+ * written for C and C++) to make moves.
+ * 
+ * IMPORTANT NOTE ON NEURAL NETWORKS:
  * Neural network needs to be trained from an outside (Documents/FANNTraining)
  * C++ program in order for this to work (if you use fantool you'll get
  * "Wrong version" error. After creating the neural network this way all the
@@ -106,5 +110,4 @@ public class PlayerNeuralNetwork implements Player{
         else if (player == 1 && field == 2) { return -1; }
         else                                { return  0; }
     }
-    
 }

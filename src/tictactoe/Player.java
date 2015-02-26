@@ -1,6 +1,7 @@
 package tictactoe;
 
 /**
+ * Interface for a Tic-Tac-Toe player.
  * 
  * @author Ljubo Raicevic <rljubo90@gmail.com>
  */

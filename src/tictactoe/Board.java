@@ -37,6 +37,13 @@ public class Board {
         this.nextMovePlayer = 1;
     }
     
+    /**
+     * Makes a new board from a byte array.
+     * 
+     * @param size Board size
+     * @param sequence Byte array (positions of moves)
+     * @param movesPlayed How many moves have been played so far
+     */
     public Board(int size, byte[] sequence, int movesPlayed) {
         this(size);
         
@@ -113,7 +120,9 @@ public class Board {
     
     /**
      * Puts a "mark" on a field without checking if the field has been marked.
-     * Also, it doesn't lower noOfEmptyFields
+     * Also, it doesn't lower noOfEmptyFields. 
+     * THIS METHOD SHOULD ONLY BE USED FROM MonteCarlo.java AND 
+     * PlayerNeuralNetwork, WHEN EVALUATING THE BOARD.
      *
      * @param c Coordinates of the field
      * @param mark of the player - 1 or 2
@@ -193,7 +202,7 @@ public class Board {
     
     /**
      * Calculates the coordinate from an absolute position on the table. E.g.
-     * ona 3x3 board i = 5 will produce (1,1) - second row, second column.
+     * on a 3x3 board i = 5 will produce (1,1) - second row, second column.
      * 
      * @param i
      * @return Coordinate of i
