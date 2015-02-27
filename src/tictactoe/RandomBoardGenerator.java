@@ -46,7 +46,7 @@ public class RandomBoardGenerator {
      * @return 
      */
     private static int getRandomMovesPlayed() {
-        int random = (int) Math.ceil(Math.random() * 559953);
+        int random = (int) Math.ceil(Math.random() * 362880); // 362880 = 9!
         if      (random <= 9)      { return 0; }
         else if (random <= 504)    { return 2; }
         else if (random <= 15120)  { return 4; }
@@ -55,7 +55,7 @@ public class RandomBoardGenerator {
     }
     
     /**
-     * Makes a random sequence which get overlayed over the board.
+     * Makes a random sequence which get overlaid over the board.
      * 
      * @param movesPlayed
      * @param boardLength
@@ -69,7 +69,7 @@ public class RandomBoardGenerator {
     
     /**
      * Creates sequence of 0,1 and 2 which becomes the sequence which gets
-     * overlayed over the board when making a random board.
+     * overlaid over the board when making a random board.
      * 
      * @param movesPlayed
      * @param boardLength

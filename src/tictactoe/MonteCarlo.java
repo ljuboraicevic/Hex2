@@ -5,7 +5,7 @@ import java.util.Comparator;
 
 /**
  * MonteCarlo class contains static methods that are used by PlayerMonteCarlo
- * and dataGeneration in TitTacToe.java.
+ * and randomDataGeneration in TitTacToe.java.
  * 
  * @author Ljubo Raicevic <rljubo90@gmail.com>
  */
@@ -72,6 +72,7 @@ public class MonteCarlo {
                 }
             }
             
+            //write down the result for this empty field
             moves[field] = new MCSimulationMove(emptyFields[field], thisFieldWinSum * 1.0);
         }
 
@@ -150,7 +151,7 @@ public class MonteCarlo {
     }
     
     /**
-     * Shuffle the byte array
+     * Shuffles the byte array
      * 
      * @param ar Array of bytes
      */
@@ -166,7 +167,7 @@ public class MonteCarlo {
     }
     
     /**
-     * Check if player won on the board b.
+     * Checks if player won on the board b.
      * 
      * @param b
      * @param player

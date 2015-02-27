@@ -44,17 +44,14 @@ public class Game {
      * respectively
      */
     public byte whoWon() {
-        if (MonteCarlo.didPlayerWin(board, (byte)1)) {
-            return 1;
-        } else if (MonteCarlo.didPlayerWin(board, (byte)2)) {
-            return 2;
-        } else {
-            return 0;
-        }
+        if      (MonteCarlo.didPlayerWin(board, (byte)1)) { return 1; }
+        else if (MonteCarlo.didPlayerWin(board, (byte)2)) { return 2; }
+        else                                              { return 0; }
     }
 
     /**
-     * Starts the game. Players take turns until one of them wins.
+     * Starts the game. Players take turns until one of them wins, or until the
+     * board is full.
      * 
      * @return Returns the winning player
      */
@@ -78,5 +75,4 @@ public class Game {
         System.out.println("Player " + winningPlayer + " wins!");
         return winningPlayer;
     }
-
 }

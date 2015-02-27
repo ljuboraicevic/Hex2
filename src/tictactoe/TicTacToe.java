@@ -15,8 +15,8 @@ public class TicTacToe {
 
     /* CONSTANTS */
     private static final int boardSize = 3;
-    private static final int MCRepetitions = 1000;
-    private static final String NNFileName = "fannnetworks/fifth.net";
+    private static final int MCRepetitions = 3000;
+    private static final String NNFileName = "fannnetworks/newdata3.net";
     
     /**
      * @param args the command line arguments
@@ -28,8 +28,9 @@ public class TicTacToe {
         PlayerMonteCarlo pmc2 = new PlayerMonteCarlo(MCRepetitions);
         PlayerNeuralNetwork pnn1 = new PlayerNeuralNetwork(NNFileName);
         
-        multipleGames(pmc1, pmc2, 100);
-        //dataGeneration(10000, "datasets/newdata");
+        //singleGame(ph1, pmc1);
+        multipleGames(pnn1, pmc2, 300);
+        //randomDataGeneration(50000, "datasets/datawithzeros.dat");
     }
 
     /**
@@ -70,13 +71,13 @@ public class TicTacToe {
      * @param repetitions How many random boards should be evaluated
      * @param fileName Filename where data will be saved 
      */
-    public static void dataGeneration(int repetitions, String fileName) {
+    public static void randomDataGeneration(int repetitions, String fileName) {
         
         StringBuilder sb = new StringBuilder();
         
         for (int iCount = 0; iCount < repetitions; iCount++) {
             Board board = RandomBoardGenerator.makeUpARandomBoard(boardSize);
-            MonteCarlo.evaluateBoard(board, repetitions, sb);
+            MonteCarlo.evaluateBoard(board, MCRepetitions, sb);
             if (iCount % 1000 == 0) { System.out.println(iCount); }
         }
         
