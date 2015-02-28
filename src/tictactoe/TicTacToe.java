@@ -15,22 +15,22 @@ public class TicTacToe {
 
     /* CONSTANTS */
     private static final int boardSize = 3;
-    private static final int MCRepetitions = 3000;
-    private static final String NNFileName = "fannnetworks/newdata3.net";
+    private static final int MCRepetitions = 10000;
+    private static final String NNFileName = "fannnetworks/newdata-2layers.net";
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         /* INITIALIZE THE PLAYERS */
-        PlayerHuman ph1 = new PlayerHuman();
-        PlayerMonteCarlo pmc1 = new PlayerMonteCarlo(MCRepetitions);
-        PlayerMonteCarlo pmc2 = new PlayerMonteCarlo(MCRepetitions);
-        PlayerNeuralNetwork pnn1 = new PlayerNeuralNetwork(NNFileName);
+        PlayerHuman h = new PlayerHuman();
+        PlayerMonteCarlo mc = new PlayerMonteCarlo(MCRepetitions);
+        PlayerNeuralNetwork nn = new PlayerNeuralNetwork(NNFileName);
         
-        //singleGame(ph1, pmc1);
-        multipleGames(pnn1, pmc2, 300);
+        singleGame(nn, h);
+        //multipleGames(nn, mc, 300);
         //randomDataGeneration(50000, "datasets/datawithzeros.dat");
+        //monteCarloDataGeneration(MCRepetitions, MCRepetitions, 200, "datasets/montecarlodata");
     }
 
     /**
@@ -81,6 +81,37 @@ public class TicTacToe {
             if (iCount % 1000 == 0) { System.out.println(iCount); }
         }
         
+        try (FileWriter fw = new FileWriter(new File(fileName))) {
+            fw.write(sb.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(TicTacToe.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    /**
+     * Plays games between two MonteCarlo players and records them.
+     * 
+     * @param p1MCRepetitions Number of MonteCarlo repetitions for player 1
+     * @param p2MCRepetitions Number of MonteCarlo repetitions for player 2
+     * @param noOfGames How many games will be played between the two players
+     * @param fileName  File to which the data is saved
+     */
+    public static void monteCarloDataGeneration(
+            int p1MCRepetitions, 
+            int p2MCRepetitions,
+            int noOfGames,
+            String fileName) {
+        
+        StringBuilder sb = new StringBuilder();
+        //player one's moves get recorded in the StringBuilder
+        PlayerMonteCarlo p1 = new PlayerMonteCarlo(p1MCRepetitions, sb);
+        //player two's moves don't get recorded
+        PlayerMonteCarlo p2 = new PlayerMonteCarlo(p2MCRepetitions);
+        
+        //play the games
+        multipleGames(p1, p2, noOfGames);
+        
+        //save data to file
         try (FileWriter fw = new FileWriter(new File(fileName))) {
             fw.write(sb.toString());
         } catch (IOException ex) {
