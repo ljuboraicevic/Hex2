@@ -1,4 +1,4 @@
-package tictactoe;
+package hex2;
 
 /**
  * A Monte Carlo player. Uses Monte Carlo simulation from MonteCarlo.java to

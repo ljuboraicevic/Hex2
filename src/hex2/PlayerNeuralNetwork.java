@@ -1,4 +1,4 @@
-package tictactoe;
+package hex2;
 
 import com.googlecode.fannj.Fann;
 

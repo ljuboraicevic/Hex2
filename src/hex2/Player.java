@@ -1,7 +1,7 @@
-package tictactoe;
+package hex2;
 
 /**
- * Interface for a Tic-Tac-Toe player.
+ * Interface for a Hex player.
  * 
  * @author Ljubo Raicevic <rljubo90@gmail.com>
  */

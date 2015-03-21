@@ -1,4 +1,4 @@
-package tictactoe;
+package hex2;
 
 /**
  * Class Coordinate represents row and column coordinates of a single field on

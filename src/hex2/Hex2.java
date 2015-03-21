@@ -1,4 +1,4 @@
-package tictactoe;
+package hex2;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -11,26 +11,34 @@ import java.util.logging.Logger;
  *
  * @author Ljubo Raicevic <rljubo90@gmail.com>
  */
-public class TicTacToe {
+public class Hex2 {
 
     /* CONSTANTS */
-    private static final int boardSize = 3;
-    private static final int MCRepetitions = 10000;
-    private static final String NNFileName = "fannnetworks/newdata-2layers.net";
+    private static final int boardSize = 7;
+    private static final int MCRepetitions = 1000;
+    private static final String NNFileName = "fannnetworks/series2/cuniform-2layers.net";
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         /* INITIALIZE THE PLAYERS */
+        //StringBuilder sb = new StringBuilder();
         PlayerHuman h = new PlayerHuman();
         PlayerMonteCarlo mc = new PlayerMonteCarlo(MCRepetitions);
-        PlayerNeuralNetwork nn = new PlayerNeuralNetwork(NNFileName);
+        PlayerMonteCarlo mc2 = new PlayerMonteCarlo(MCRepetitions);
+        //PlayerNeuralNetwork nn = new PlayerNeuralNetwork(NNFileName);
         
-        singleGame(nn, h);
-        //multipleGames(nn, mc, 300);
-        //randomDataGeneration(50000, "datasets/datawithzeros.dat");
-        //monteCarloDataGeneration(MCRepetitions, MCRepetitions, 200, "datasets/montecarlodata");
+        singleGame(mc, mc2);
+        //multipleGames(mc2, mc, 3);
+        //randomDataGeneration(1, "test");
+        //monteCarloDataGeneration(10000, 3, 30, "datasets/series2/cuniform");
+        
+//        try (FileWriter fw = new FileWriter(new File("test"))) {
+//            fw.write(sb.toString());
+//        } catch (IOException ex) {
+//            Logger.getLogger(Hex2.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     /**
@@ -58,7 +66,7 @@ public class TicTacToe {
         for (int iCount = 0; iCount < repetitions; iCount++) {
             Board b = new Board(boardSize);
             Game g = new Game(b, p1, p2);
-            int winner = g.play();
+            byte winner = g.play();
             wins[winner]++;
         }
         
@@ -84,7 +92,7 @@ public class TicTacToe {
         try (FileWriter fw = new FileWriter(new File(fileName))) {
             fw.write(sb.toString());
         } catch (IOException ex) {
-            Logger.getLogger(TicTacToe.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Hex2.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -115,7 +123,7 @@ public class TicTacToe {
         try (FileWriter fw = new FileWriter(new File(fileName))) {
             fw.write(sb.toString());
         } catch (IOException ex) {
-            Logger.getLogger(TicTacToe.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Hex2.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

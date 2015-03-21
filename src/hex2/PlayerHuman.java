@@ -1,4 +1,4 @@
-package tictactoe;
+package hex2;
 
 import java.util.Scanner;
 

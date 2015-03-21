@@ -1,4 +1,4 @@
-package tictactoe;
+package hex2;
 
 /**
  *
@@ -14,7 +14,14 @@ public class RandomBoardGenerator {
      */
     public static Board makeUpARandomBoard(int boardSize) {
         int n = boardSize * boardSize;
-        return makeRandomBoard(getRandomMovesPlayed(), boardSize);
+        //for now, movesPlayed has to be even
+        int movesPlayed = 1;
+        while (movesPlayed % 2 != 0) {
+            movesPlayed = (int) Math.ceil(Math.random() * n);
+        }
+        return makeRandomBoard(movesPlayed, boardSize);
+//        int n = boardSize * boardSize;
+//        return makeRandomBoard(getRandomMovesPlayed(), boardSize);
     }
     
     /**
@@ -27,15 +34,15 @@ public class RandomBoardGenerator {
      */
     public static Board makeRandomBoard(int movesPlayed, int boardSize) {
         Board b = null;
-        boolean boardNotWon = false;
-        while (!boardNotWon) {
+//        boolean boardNotWon = false;
+//        while (!boardNotWon) {
             byte[] sequence = getRandomSequence(movesPlayed, boardSize * boardSize);
             b = new Board(boardSize, sequence, movesPlayed);
-            if (!MonteCarlo.didPlayerWin(b, (byte)1)
-                    && !MonteCarlo.didPlayerWin(b, (byte)2)) {
-                boardNotWon = true;
-            }
-        }
+//            if (!MonteCarlo.didPlayerWin(b, (byte)1)
+//                    && !MonteCarlo.didPlayerWin(b, (byte)2)) {
+//                boardNotWon = true;
+//            }
+//        }
         return b;
     }
 

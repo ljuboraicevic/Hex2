@@ -1,4 +1,4 @@
-package tictactoe;
+package hex2;
 
 /**
  *
@@ -57,6 +57,10 @@ public class Board {
         this.nextMovePlayer = (byte) (movesPlayed % 2 + 1);
     }
     
+    public boolean isFieldVertical(Coordinate c) {
+        return matrix[c.row][c.col] == 1;
+    }
+    
     public int getSize() {
         return this.size;
     }
@@ -65,7 +69,7 @@ public class Board {
         return this.noOfEmptyFields;
     }
     
-    public int getFieldMark(Coordinate c) {
+    public byte getFieldMark(Coordinate c) {
         return this.matrix[c.row][c.col];
     }
     
@@ -255,12 +259,17 @@ public class Board {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(System.lineSeparator());
-        
         for (int row = 0; row < size; row++) {
+
+            //add empty spaces to make romboid shape
+            for (int iCount = 0; iCount < row; iCount++) {
+                sb.append(" ");
+            }
+
             for (int col = 0; col < size; col++) {
                 sb.append(matrix[row][col]).append(" ");
             }
+
             sb.append(System.lineSeparator());
         }
 
