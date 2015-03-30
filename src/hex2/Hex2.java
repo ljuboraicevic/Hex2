@@ -21,11 +21,11 @@ public class Hex2 {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        /* INITIALIZE THE PLAYERS */
-        //StringBuilder sb = new StringBuilder();
+  /*  public static void main(String[] args) {
+      //  /* INITIALIZE THE PLAYERS 
+        StringBuilder sb = new StringBuilder();
         PlayerHuman h = new PlayerHuman();
-        PlayerMonteCarlo mc = new PlayerMonteCarlo(MCRepetitions);
+        PlayerMonteCarlo mc = new PlayerMonteCarlo(MCRepetitions, sb);
         PlayerMonteCarlo mc2 = new PlayerMonteCarlo(MCRepetitions);
         //PlayerNeuralNetwork nn = new PlayerNeuralNetwork(NNFileName);
         
@@ -34,12 +34,12 @@ public class Hex2 {
         //randomDataGeneration(1, "test");
         //monteCarloDataGeneration(10000, 3, 30, "datasets/series2/cuniform");
         
-//        try (FileWriter fw = new FileWriter(new File("test"))) {
-//            fw.write(sb.toString());
-//        } catch (IOException ex) {
-//            Logger.getLogger(Hex2.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-    }
+        try (FileWriter fw = new FileWriter(new File("test"))) {
+            fw.write(sb.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(Hex2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }*/
 
     /**
      * Plays a single game.

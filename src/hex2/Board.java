@@ -5,6 +5,10 @@ package hex2;
  * @author Ljubo Raicevic <rljubo90@gmail.com>
  */
 public class Board {
+    
+    public static final byte FIRST_PLAYERS_MARK = 1;
+    
+    public static final byte SECOND_PLAYERS_MARK = 2;
     /**
      * Matrix of bytes representing past players' past moves.
      */
@@ -68,6 +72,19 @@ public class Board {
     public int getNoOfEmptyFields() {
         return this.noOfEmptyFields;
     }
+    
+    public int getNoOfMovesPlayed(){
+        return size * size - this.noOfEmptyFields;
+    }
+    
+    public byte whoMadeLastMove(){
+        if(nextMovePlayer == FIRST_PLAYERS_MARK){
+            return SECOND_PLAYERS_MARK;
+        }
+        return FIRST_PLAYERS_MARK;
+    }
+    
+    
     
     public byte getFieldMark(Coordinate c) {
         return this.matrix[c.row][c.col];
@@ -181,6 +198,45 @@ public class Board {
         }
 
         return result;
+    }
+    
+    private byte[] createLegalRandomArrayForFillingEmtyFields(){
+        byte [] result = new byte[noOfEmptyFields];
+        int noOfFirstPlayerMovesRemaining = getNoOfRemainingMovesForFirstPlayer();
+        int i;
+        for(i = 0; i < noOfFirstPlayerMovesRemaining; i++){
+            result[i] = FIRST_PLAYERS_MARK;
+        }
+        for(; i<noOfEmptyFields; i++){
+            result[i] = SECOND_PLAYERS_MARK;
+        }
+        MonteCarlo.shuffleArray(result);
+        return result;
+    }
+
+    private int getNoOfRemainingMovesForFirstPlayer() {
+        int noOfFirstPlayerMovesRemaining;
+        noOfFirstPlayerMovesRemaining = noOfEmptyFields / 2;
+        if(noOfEmptyFields % 2 != 0 && nextMovePlayer == FIRST_PLAYERS_MARK){
+            noOfFirstPlayerMovesRemaining ++;
+        }
+        return noOfFirstPlayerMovesRemaining;
+    }
+    
+    public  Board createPossibleOutcomeAfterAllFieldsMarked() {
+        
+        Board possibleOutcomeWithAllFiedsMarked = this.deepCopy();
+        Coordinate[] emptyFields = this.getEmptyFields();
+        byte[] sequence = this.createLegalRandomArrayForFillingEmtyFields();
+        
+        int seqCount = 0;
+        for (Coordinate c : emptyFields) {
+            possibleOutcomeWithAllFiedsMarked.putMarkHard(
+                    new Coordinate(c.row, c.col), sequence[seqCount]);
+            
+            seqCount++;
+        }
+        return possibleOutcomeWithAllFiedsMarked;
     }
     
     /**

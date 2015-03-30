@@ -68,7 +68,7 @@ public class MonteCarlo {
                     }
                     seqCount++;
                 }
-                    
+
                     //discard the board if both players won
 //                    if (MonteCarlo.didPlayerWin(boardCopy, player) && 
 //                            (MonteCarlo.didPlayerWin(boardCopy, 
@@ -113,6 +113,27 @@ public class MonteCarlo {
         
         return moves;
     }
+        
+    public static double getProbabilityPlayerThatMadeLastMoveWins(
+            Board b, 
+            int repetitions) {
+        
+        byte whoMadeLastMove = b.whoMadeLastMove();
+        int numberOfWins = 0;
+             
+        for (int repetition = 0; repetition < repetitions; repetition++) {
+            Board possibleOutcome = b.createPossibleOutcomeAfterAllFieldsMarked();
+            //todo find better way!!!
+
+            //check if current player won
+            if (MonteCarlo.didPlayerWin(possibleOutcome, whoMadeLastMove)) {
+                numberOfWins++;
+            }
+        }
+        
+        return (numberOfWins * 1.0) / repetitions ;
+    }
+
     
     /**
      * Makes a random sequence of moves.
