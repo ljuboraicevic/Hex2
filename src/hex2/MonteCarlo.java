@@ -10,7 +10,7 @@ import java.util.Comparator;
  * @author Ljubo Raicevic <rljubo90@gmail.com>
  */
 public class MonteCarlo {
-        
+
     /**
      * Returns array of MCSimulationMove that contains all possible moves and 
      * their probabilities. First element in array is best move, chosen by 
@@ -18,7 +18,7 @@ public class MonteCarlo {
      * 
      * @param b
      * @param repetitions
-     * @param sb
+     * @param sb 
      * @return 
      */
     public static MCSimulationMove[] evaluateBoard(
@@ -47,12 +47,7 @@ public class MonteCarlo {
             
             //make repetitions
             for (int repetition = 0; repetition < repetitions; repetition++) {
-                //boolean ok = false;
-                //while a board, which doesn't have both players as winners,
-                //isn't generated
-                //while (!ok) {
-                //ok = true;
-                //get random sequence
+
                 byte[] sequence = MonteCarlo.getRandomSequence(
                         movesPlayed, 
                         boardCopy.getSize() * boardCopy.getSize());
@@ -68,14 +63,6 @@ public class MonteCarlo {
                     }
                     seqCount++;
                 }
-                    
-                    //discard the board if both players won
-//                    if (MonteCarlo.didPlayerWin(boardCopy, player) && 
-//                            (MonteCarlo.didPlayerWin(boardCopy, 
-//                                Board.calculateNextPlayer(player)))) { 
-//                        ok = false;
-//                    }
-                //}
 
                 //check if current player won
                 if (MonteCarlo.didPlayerWin(boardCopy, player)) {

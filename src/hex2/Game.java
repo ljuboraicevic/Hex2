@@ -80,6 +80,7 @@ public class Game {
             board.putMark(move, (byte) (movesPlayed % 2 + 1));
             //connect the field to its neighbors of the same color
             Coordinate[] sameColorNeighbors = findFieldsNeighborsOfSameColor(move);
+            //System.out.println(board);
 
             for (Coordinate neighbor : sameColorNeighbors) {
                 unionFind.union(getFieldIndex(move), getFieldIndex(neighbor));

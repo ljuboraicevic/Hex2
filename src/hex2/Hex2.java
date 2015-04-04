@@ -15,7 +15,7 @@ public class Hex2 {
 
     /* CONSTANTS */
     private static final int boardSize = 7;
-    private static final int MCRepetitions = 1000;
+    private static final int MCRepetitions = 10000;
     private static final String NNFileName = "fannnetworks/series2/cuniform-2layers.net";
     
     /**
@@ -27,10 +27,11 @@ public class Hex2 {
         PlayerHuman h = new PlayerHuman();
         PlayerMonteCarlo mc = new PlayerMonteCarlo(MCRepetitions);
         PlayerMonteCarlo mc2 = new PlayerMonteCarlo(MCRepetitions);
+        PlayerBranchingMonteCarlo bmc = new PlayerBranchingMonteCarlo(MCRepetitions, 2, 2);
         //PlayerNeuralNetwork nn = new PlayerNeuralNetwork(NNFileName);
         
-        singleGame(mc, mc2);
-        //multipleGames(mc2, mc, 3);
+        //singleGame(bmc, mc2);
+        multipleGames(bmc, mc, 10);
         //randomDataGeneration(1, "test");
         //monteCarloDataGeneration(10000, 3, 30, "datasets/series2/cuniform");
         
