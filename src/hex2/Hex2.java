@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 public class Hex2 {
 
     /* CONSTANTS */
-    private static final int boardSize = 7;
-    private static final int MCRepetitions = 10000;
+    private static final int boardSize = 5;
+    private static final int MCRepetitions = 3000;
     private static final String NNFileName = "fannnetworks/series2/cuniform-2layers.net";
     
     /**
@@ -30,8 +30,8 @@ public class Hex2 {
         PlayerBranchingMonteCarlo bmc = new PlayerBranchingMonteCarlo(MCRepetitions, 2, 2);
         //PlayerNeuralNetwork nn = new PlayerNeuralNetwork(NNFileName);
         
-        //singleGame(bmc, mc2);
-        multipleGames(bmc, mc, 10);
+        singleGame(bmc, mc2);
+        //multipleGames(bmc, mc, 10);
         //randomDataGeneration(1, "test");
         //monteCarloDataGeneration(10000, 3, 30, "datasets/series2/cuniform");
         
@@ -52,6 +52,15 @@ public class Hex2 {
         Board b = new Board(boardSize);
         Game g = new Game(b, p1, p2);
         g.play();
+    }
+    
+    public static void compareMCwithBranchingMC() {
+        //generate array of random boards (e.g. 1000)
+        
+        //for each board do x100
+        //for each of the boards PlayerBranching do a makeMove
+        
+        //
     }
     
     /**
