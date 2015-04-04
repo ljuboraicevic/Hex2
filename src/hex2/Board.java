@@ -200,6 +200,17 @@ public class Board {
         return result;
     }
     
+    public Board[] getAllPossibleBoardsAfterNextPlayerMove(){
+        Board [] possibleMoves = new Board[noOfEmptyFields];
+        int i = 0;
+        for(Coordinate emptyField : getEmptyFields()){
+            possibleMoves[i] = deepCopy();
+            possibleMoves[i].putMarkHard(emptyField, nextMovePlayer);
+            i++;
+        }
+        return possibleMoves;
+    }
+    
     private byte[] createLegalRandomArrayForFillingEmtyFields(){
         byte [] result = new byte[noOfEmptyFields];
         int noOfFirstPlayerMovesRemaining = getNoOfRemainingMovesForFirstPlayer();
@@ -207,9 +218,10 @@ public class Board {
         for(i = 0; i < noOfFirstPlayerMovesRemaining; i++){
             result[i] = FIRST_PLAYERS_MARK;
         }
-        for(; i<noOfEmptyFields; i++){
+        for(; i < noOfEmptyFields; i++){
             result[i] = SECOND_PLAYERS_MARK;
         }
+        //todo izdvojiti u neki util
         MonteCarlo.shuffleArray(result);
         return result;
     }
