@@ -16,6 +16,26 @@ public final class Coordinate {
     }
     
     @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Coordinate other = (Coordinate) obj;
+        if (this.row != other.row) {
+            return false;
+        }
+        if (this.col != other.col) {
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
+    @Override
     public String toString() {
         return row + ", " + col;
     }

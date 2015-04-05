@@ -13,7 +13,7 @@ public class RandomBoardGenerator {
      * @return 
      */
     public static Board makeUpARandomBoard(int boardSize) {
-        int n = boardSize * boardSize;
+        int n = boardSize * boardSize - 5;
         //for now, movesPlayed has to be even
         int movesPlayed = 1;
         while (movesPlayed % 2 != 0) {

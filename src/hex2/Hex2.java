@@ -30,7 +30,8 @@ public class Hex2 {
         PlayerBranchingMonteCarlo bmc = new PlayerBranchingMonteCarlo(MCRepetitions, 2, 2);
         //PlayerNeuralNetwork nn = new PlayerNeuralNetwork(NNFileName);
         
-        singleGame(bmc, mc2);
+        compareMCwithBranchingMC();
+        //singleGame(bmc, mc2);
         //multipleGames(bmc, mc, 10);
         //randomDataGeneration(1, "test");
         //monteCarloDataGeneration(10000, 3, 30, "datasets/series2/cuniform");
@@ -55,12 +56,61 @@ public class Hex2 {
     }
     
     public static void compareMCwithBranchingMC() {
+        
+        int noOfBoards = 100;
+        int plies = 2;
+        int best = 2;
+        int repetitions = 100;
+        
+        MCSimulationMove[] classicMoves = new MCSimulationMove[noOfBoards];
+        MCSimulationMove[] branchingMoves = new MCSimulationMove[noOfBoards];
+        
+        int[] noOfSwitchedBoards = new int[noOfBoards];
+        int totalSwitches = 0;
+        double[] averageSwitchProbabilityDiff = new double[noOfBoards];
+        double totalAverageProbabilityDiff = 0;
+        
         //generate array of random boards (e.g. 1000)
+        Board[] boards = new Board[noOfBoards];
+        for (int iCount = 0; iCount < noOfBoards; iCount++) {
+            boards[iCount] = RandomBoardGenerator.makeUpARandomBoard(boardSize);
+        }
         
-        //for each board do x100
-        //for each of the boards PlayerBranching do a makeMove
+        //repeat the whole experiment "repetition" times
+        for (int repCount = 0; repCount < repetitions; repCount++) {
+            System.out.println(repCount);
+            //for each board do x100
+            //for each of the boards PlayerBranching do a makeMove
+            for (int boardCount = 0; boardCount < noOfBoards; boardCount++) {
+                BranchingLogic logic = new BranchingLogic(boards[boardCount], MCRepetitions, plies, best);
+                MCSimulationMove classicMove   = logic.getMCMove();
+                MCSimulationMove branchingMove = logic.getMCBranchingMove();
+                classicMoves[boardCount]   = classicMove;
+                branchingMoves[boardCount] = branchingMove;
+                
+                //if branching and classicMC have chosen different boards
+                if (!classicMove.getCoordinates().equals(branchingMove.getCoordinates())) {
+                    noOfSwitchedBoards[boardCount]++;
+                    averageSwitchProbabilityDiff[boardCount] += 
+                            classicMove.getProbability() - branchingMove.getProbability();
+                    totalSwitches++;
+                    totalAverageProbabilityDiff += 
+                            classicMove.getProbability() - branchingMove.getProbability();
+                }
+            }
+        }
         
-        //
+        //divide averageSwitchProbabilityDiffs to get the average
+        for (int iCount = 0; iCount < noOfBoards; iCount++) {
+            averageSwitchProbabilityDiff[iCount] /= repetitions * MCRepetitions;
+        }
+        
+        totalAverageProbabilityDiff /= repetitions * MCRepetitions * noOfBoards;
+        
+        System.out.println(Arrays.toString(noOfSwitchedBoards));
+        System.out.println(Arrays.toString(averageSwitchProbabilityDiff));
+        System.out.println((totalSwitches * 1.0) / (noOfBoards * repetitions));
+        System.out.println(totalAverageProbabilityDiff);
     }
     
     /**

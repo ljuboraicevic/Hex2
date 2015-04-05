@@ -69,7 +69,7 @@ public class BranchingLogic {
             counter++;
         }
         
-        System.out.println(cOriginal[counter]);
+        //System.out.println(cOriginal[counter]);
         
         this.MCBranchingMove = cOriginal[counter];
         //return cOriginal[counter].getCoordinates();
