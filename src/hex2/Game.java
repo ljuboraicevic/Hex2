@@ -78,8 +78,11 @@ public class Game {
 
             //players[0]'s mark is 1 and player[1]'s mark is 2
             board.putMark(move, (byte) (movesPlayed % 2 + 1));
+            
+            System.out.println(board);
             //connect the field to its neighbors of the same color
             Coordinate[] sameColorNeighbors = findFieldsNeighborsOfSameColor(move);
+            //System.out.println(board);
 
             for (Coordinate neighbor : sameColorNeighbors) {
                 unionFind.union(getFieldIndex(move), getFieldIndex(neighbor));
