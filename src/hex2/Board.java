@@ -10,7 +10,7 @@ public class Board {
     
     public static final byte SECOND_PLAYERS_MARK = 2;
     /**
-     * Matrix of bytes representing past players' past moves.
+     * Matrix of bytes representing players past moves.
      */
     private byte[][] matrix;
 
@@ -61,7 +61,21 @@ public class Board {
         this.nextMovePlayer = (byte) (movesPlayed % 2 + 1);
     }
     
-    public boolean isFieldVertical(Coordinate c) {
+    public Board(String stringRepresentation, int size){
+        this(size);
+        int counter = 0;
+        for(int i = 0; i < stringRepresentation.length(); i++){
+            if(stringRepresentation.charAt(i) == '-'){
+                this.putMark(this.intToCoordinate(counter), SECOND_PLAYERS_MARK);
+                i++;
+            }else if(stringRepresentation.charAt(i) == '1'){
+                this.putMark(this.intToCoordinate(counter), FIRST_PLAYERS_MARK);
+            }
+            counter++;
+        }
+    }
+    
+    public boolean isFieldMarkedByFirstPlayer(Coordinate c) {
         return matrix[c.row][c.col] == 1;
     }
     
@@ -76,7 +90,9 @@ public class Board {
     public int getNoOfMovesPlayed(){
         return size * size - this.noOfEmptyFields;
     }
-    
+    /**
+     * @return mark of player who made last move
+     */
     public byte whoMadeLastMove(){
         if(nextMovePlayer == FIRST_PLAYERS_MARK){
             return SECOND_PLAYERS_MARK;
@@ -132,6 +148,7 @@ public class Board {
         if (!isFieldMarked(c)) {
             noOfEmptyFields--;
             putMarkHard(c, mark);
+            nextMovePlayer = (byte) (nextMovePlayer == 1 ? 2 : 1);
             return true;
         }
 
@@ -149,12 +166,7 @@ public class Board {
      * @param mark of the player - 1 or 2
      */
     public void putMarkHard(Coordinate c, byte mark) {
-        matrix[c.row][c.col] = mark;  //mark it
-        nextMovePlayer = calculateNextPlayer(nextMovePlayer);
-    }
-    
-    public static byte calculateNextPlayer(byte player) {
-        return (byte) ((player + 1) - (2 * ((player + 1) % 2)));
+        matrix[c.row][c.col] = mark;
     }
     
     /**
@@ -170,7 +182,7 @@ public class Board {
         } else {
             matrix[c.row][c.col] = 0;
             noOfEmptyFields++;
-            nextMovePlayer = (byte) ((nextMovePlayer + 1) % 2);
+            nextMovePlayer = (byte) (nextMovePlayer == 1 ? 2 : 1);
             return true;
         }
     }
@@ -200,18 +212,12 @@ public class Board {
         return result;
     }
     
-    public Board[] getAllPossibleBoardsAfterNextPlayerMove(){
-        Board [] possibleMoves = new Board[noOfEmptyFields];
-        int i = 0;
-        for(Coordinate emptyField : getEmptyFields()){
-            possibleMoves[i] = deepCopy();
-            possibleMoves[i].putMarkHard(emptyField, nextMovePlayer);
-            i++;
-        }
-        return possibleMoves;
-    }
-    
-    private byte[] createLegalRandomArrayForFillingEmtyFields(){
+    /**
+     * Creates marks for random filling board. These moves are legal, meaning after filled board
+     * all player have maximal allowed number of marks.
+     * @return shuffled array of first and second player marks
+     */
+    public byte[] createLegalRandomArrayForFillingEmtyFields(){
         byte [] result = new byte[noOfEmptyFields];
         int noOfFirstPlayerMovesRemaining = getNoOfRemainingMovesForFirstPlayer();
         int i;
@@ -233,22 +239,6 @@ public class Board {
             noOfFirstPlayerMovesRemaining ++;
         }
         return noOfFirstPlayerMovesRemaining;
-    }
-    
-    public  Board createPossibleOutcomeAfterAllFieldsMarked() {
-        
-        Board possibleOutcomeWithAllFiedsMarked = this.deepCopy();
-        Coordinate[] emptyFields = this.getEmptyFields();
-        byte[] sequence = this.createLegalRandomArrayForFillingEmtyFields();
-        
-        int seqCount = 0;
-        for (Coordinate c : emptyFields) {
-            possibleOutcomeWithAllFiedsMarked.putMarkHard(
-                    new Coordinate(c.row, c.col), sequence[seqCount]);
-            
-            seqCount++;
-        }
-        return possibleOutcomeWithAllFiedsMarked;
     }
     
     /**

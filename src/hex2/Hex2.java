@@ -14,33 +14,53 @@ import java.util.logging.Logger;
 public class Hex2 {
 
     /* CONSTANTS */
-    private static final int boardSize = 5;
+    private static final int boardSize = 7;
     private static final int MCRepetitions = 3000;
     private static final String NNFileName = "fannnetworks/series2/cuniform-2layers.net";
     
     /**
      * @param args the command line arguments
      */
-  /*  public static void main(String[] args) {
-      //  /* INITIALIZE THE PLAYERS 
+    public static void main(String[] args) {
+        /* INITIALIZE THE PLAYERS 
         StringBuilder sb = new StringBuilder();
         PlayerHuman h = new PlayerHuman();
         PlayerMonteCarlo mc = new PlayerMonteCarlo(MCRepetitions, sb);
         PlayerMonteCarlo mc2 = new PlayerMonteCarlo(MCRepetitions);
         PlayerBranchingMonteCarlo bmc = new PlayerBranchingMonteCarlo(MCRepetitions, 2, 2);
-        //PlayerNeuralNetwork nn = new PlayerNeuralNetwork(NNFileName);
+        PlayerNeuralNetwork nn = new PlayerNeuralNetwork(NNFileName);
         
         singleGame(bmc, mc2);
-        //multipleGames(bmc, mc, 10);
-        //randomDataGeneration(1, "test");
-        //monteCarloDataGeneration(10000, 3, 30, "datasets/series2/cuniform");
+        multipleGames(bmc, mc, 10);
+        randomDataGeneration(1, "test");
+        monteCarloDataGeneration(10000, 3, 30, "datasets/series2/cuniform");
         
         try (FileWriter fw = new FileWriter(new File("test"))) {
             fw.write(sb.toString());
         } catch (IOException ex) {
             Logger.getLogger(Hex2.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }*/
+        }*/
+//            PlayerMonteCarloSearch mcs1000 = new PlayerMonteCarloSearch(1000, 2, 2);
+//            PlayerMonteCarlo mc = new PlayerMonteCarlo(1000);
+//            multipleGames(mcs1000, mc, 100);
+//         //   singleGame(mc, mc2);
+//            System.out.println("***************************");
+//            System.out.println("***************************");
+//            multipleGames(mc, mcs1000, 100);
+//            System.out.println("***************************");
+//            System.out.println("***************************");
+//            PlayerMonteCarlo mc3000 = new PlayerMonteCarlo(3000);
+//            multipleGames(mcs1000, mc3000, 100);
+//            System.out.println("***************************");
+//            System.out.println("***************************");
+//            multipleGames(mc3000, mcs1000, 100);
+        
+        PlayerMonteCarloSearch mcs1000 = new PlayerMonteCarloSearch(1000, 2, 3);
+        PlayerMonteCarlo mc = new PlayerMonteCarlo(1000);
+      //  singleGame(mcs1000, mc);
+            multipleGames(mcs1000, mc, 10);
+
+    }
 
     /**
      * Plays a single game.
@@ -51,18 +71,9 @@ public class Hex2 {
     public static void singleGame(Player p1, Player p2) {
         Board b = new Board(boardSize);
         Game g = new Game(b, p1, p2);
-        g.play();
+        g.play(true);
     }
-    
-    public static void compareMCwithBranchingMC() {
-        //generate array of random boards (e.g. 1000)
         
-        //for each board do x100
-        //for each of the boards PlayerBranching do a makeMove
-        
-        //
-    }
-    
     /**
      * Plays multiple games and reports the winners.
      * 
@@ -76,7 +87,7 @@ public class Hex2 {
         for (int iCount = 0; iCount < repetitions; iCount++) {
             Board b = new Board(boardSize);
             Game g = new Game(b, p1, p2);
-            byte winner = g.play();
+            byte winner = g.play(false);
             wins[winner]++;
         }
         
@@ -95,7 +106,7 @@ public class Hex2 {
         
         for (int iCount = 0; iCount < repetitions; iCount++) {
             Board board = RandomBoardGenerator.makeUpARandomBoard(boardSize);
-            MonteCarlo.evaluateBoard(board, MCRepetitions, sb);
+      //      MonteCarlo.evaluateBoard(board, MCRepetitions, sb);
             if (iCount % 1000 == 0) { System.out.println(iCount); }
         }
         
@@ -114,26 +125,26 @@ public class Hex2 {
      * @param noOfGames How many games will be played between the two players
      * @param fileName  File to which the data is saved
      */
-    public static void monteCarloDataGeneration(
-            int p1MCRepetitions, 
-            int p2MCRepetitions,
-            int noOfGames,
-            String fileName) {
-        
-        StringBuilder sb = new StringBuilder();
-        //player one's moves get recorded in the StringBuilder
-        PlayerMonteCarlo p1 = new PlayerMonteCarlo(p1MCRepetitions, sb);
-        //player two's moves don't get recorded
-        PlayerMonteCarlo p2 = new PlayerMonteCarlo(p2MCRepetitions);
-        
-        //play the games
-        multipleGames(p1, p2, noOfGames);
-        
-        //save data to file
-        try (FileWriter fw = new FileWriter(new File(fileName))) {
-            fw.write(sb.toString());
-        } catch (IOException ex) {
-            Logger.getLogger(Hex2.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    public static void monteCarloDataGeneration(
+//            int p1MCRepetitions, 
+//            int p2MCRepetitions,
+//            int noOfGames,
+//            String fileName) {
+//        
+//        StringBuilder sb = new StringBuilder();
+//        //player one's moves get recorded in the StringBuilder
+//        PlayerMonteCarlo p1 = new PlayerMonteCarlo(p1MCRepetitions, sb);
+//        //player two's moves don't get recorded
+//        PlayerMonteCarlo p2 = new PlayerMonteCarlo(p2MCRepetitions);
+//        
+//        //play the games
+//        multipleGames(p1, p2, noOfGames);
+//        
+//        //save data to file
+//        try (FileWriter fw = new FileWriter(new File(fileName))) {
+//            fw.write(sb.toString());
+//        } catch (IOException ex) {
+//            Logger.getLogger(Hex2.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 }

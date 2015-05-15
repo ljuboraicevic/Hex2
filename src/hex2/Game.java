@@ -65,25 +65,25 @@ public class Game {
 
     /**
      * Starts the game. Players take turns until one of them wins.
-     * 
+     * @param shouldPrintSingleMoves 
      * @return Winning player
      */
-    public byte play() {
+    public byte play(boolean shouldPrintSingleMove) {
         byte winningPlayer = 0;
 
         //while game isn't over
         while (winningPlayer == 0) {
+            if(shouldPrintSingleMove){
+                System.out.println(board);
+            }
             //players take turns based on number of moves played so far
             Coordinate move = players[movesPlayed % 2].makeMove(board);
 
             //players[0]'s mark is 1 and player[1]'s mark is 2
             board.putMark(move, (byte) (movesPlayed % 2 + 1));
-            
-            System.out.println(board);
             //connect the field to its neighbors of the same color
             Coordinate[] sameColorNeighbors = findFieldsNeighborsOfSameColor(move);
-            //System.out.println(board);
-
+            
             for (Coordinate neighbor : sameColorNeighbors) {
                 unionFind.union(getFieldIndex(move), getFieldIndex(neighbor));
             }

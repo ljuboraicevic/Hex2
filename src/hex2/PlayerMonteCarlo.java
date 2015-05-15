@@ -13,11 +13,7 @@ public class PlayerMonteCarlo implements Player {
      */
     private final int repetitions;
     
-    /**
-     * Used for collecting and saving the data about the moves played
-     */
-    private final StringBuilder sb;
-    
+    private MCNaiveLogic logic;
     
     /**
      * Initializes a new PlayerMonteCarlo without a StringBuilder.
@@ -25,19 +21,12 @@ public class PlayerMonteCarlo implements Player {
      * @param repetitions Monte Carlo simulation repetitions
      */
     public PlayerMonteCarlo(int repetitions) {
-        this(repetitions, null);
+        this.repetitions = repetitions;
+        this.logic = new MCNaiveLogic(repetitions);
     }
     
-    /**
-     * Initializes a new PlayerMonteCarlo with a StringBuilder.
-     * 
-     * @param repetitions Monte Carlo simulation repetitions
-     * @param sb StringBuilder used for collecting data about the moves
-     */
-    public PlayerMonteCarlo(int repetitions, StringBuilder sb) {
-        this.repetitions = repetitions;
-        this.sb = sb;
-    }
+    
+    
     
     public int getNumberOfRepetitions(){
         return this.repetitions;
@@ -45,6 +34,6 @@ public class PlayerMonteCarlo implements Player {
     
     @Override
     public Coordinate makeMove(Board b) {
-        return MonteCarlo.evaluateBoard(b, repetitions, sb)[0].getCoordinates();
+        return logic.getBestMove(b).getCoordinates();
     }
 }
